@@ -3,9 +3,9 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
+import { message, notification } from 'antd';
 
-const BASE_URL = '/payadmin';
+const BASE_URL = '/server';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -52,7 +52,7 @@ const errorHandler = (error: { response: Response }): Response => {
  */
 const request = extend({
   prefix: BASE_URL,
-  timeout: 2000,
+  timeout: 200000,
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
@@ -66,6 +66,9 @@ request.interceptors.response.use(async (response) => {
   }
   if (data.statusCode === 200) {
     return result;
+  }
+  if (data.statusCode === 300) {
+    message.error(data.message);
   }
   return response;
 });

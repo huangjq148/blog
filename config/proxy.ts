@@ -7,16 +7,22 @@
  */
 export default {
   dev: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
-    },
-    '/payadmin': {
-      target: 'http://118.190.246.162',
+    // '/api/': {
+    //   target: 'https://preview.pro.ant.design',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^': '' },
+    // },
+    // '/payadmin': {
+    //   target: 'http://118.190.246.162',
+    //   // target: 'http://127.0.0.1:8020',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^': '' },
+    // },
+    '/server': {
+      target: 'http://localhost:3000',
       // target: 'http://127.0.0.1:8020',
       changeOrigin: true,
-      pathRewrite: { '^': '' },
+      pathRewrite: { '^/server': '' },
     },
   },
   test: {

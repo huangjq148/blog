@@ -6,7 +6,7 @@ export async function query() {
 }
 
 export async function queryCurrent() {
-  return myRequest<API.CurrentUser>('/user_info');
+  return myRequest<API.CurrentUser>('/user/api/info');
 }
 
 export async function queryNotices(): Promise<any> {
@@ -15,5 +15,5 @@ export async function queryNotices(): Promise<any> {
 
 // 获取用户菜单权限
 export async function fetchMenuList() {
-  return myRequest.get('/menuList');
+  return myRequest.get('/user/menu');
 }

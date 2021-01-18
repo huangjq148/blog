@@ -10,14 +10,11 @@ export interface LoginParamsType {
   code: number;
 }
 
-export async function fakeAccountLogin(params: LoginParamsType) {
-  return myRequest<API.LoginStateType>('/login', {
-    method: 'get',
+export async function fakeAccountLogin(data: LoginParamsType) {
+  return myRequest<API.LoginStateType>('/user/login', {
+    method: 'post',
     // data: params,
-    params: {
-      userName: params.username,
-      passWord: params.password,
-    },
+    data,
   });
 }
 
