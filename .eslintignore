@@ -1,0 +1,13 @@
+/lambda/
+/scripts
+/config
+.history
+public
+dist
+.umi
+mock
+**/*.md
+**/*.svg
+package.json
+.umi
+.umi-production

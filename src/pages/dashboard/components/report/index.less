@@ -1,0 +1,70 @@
+.container {
+  min-height: 500px;
+}
+.headerTitle {
+  border-bottom: 1px solid rgb(209, 209, 209);
+  height: 40px;
+  margin-top: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.title {
+  height: 40px;
+  font-size: 15px;
+  display: inline-block;
+  line-height: 40px;
+}
+
+.rankItem {
+  //   display: flex;
+}
+
+.rankItem .name {
+  text-align: left;
+  display: inline-block;
+  width: 50%;
+}
+.rankItem .moneyPro {
+  width: 35%;
+  display: inline-block;
+}
+.rankItem .money {
+  width: 15%;
+  display: inline-block;
+}
+
+.rankList {
+  list-style-type: none;
+}
+.rankList li {
+  position: relative;
+  margin-top: 10px;
+}
+.rankList li::before {
+  counter-increment: ranking_list_li;
+  content: counter(ranking_list_li);
+  color: #ffffff;
+  position: absolute;
+  left: -30px;
+  top: 4px;
+  width: 15px;
+  height: 15px;
+  background: #818181;
+  line-height: normal;
+  text-align: center;
+  font-size: 10px;
+  border-radius: 50%;
+}
+.rankList li:first-child:before {
+  background: red;
+}
+.rankList li:nth-child(2):before {
+  background: #e05102;
+}
+.rankList li:nth-child(3):before {
+  background: #1ba809;
+}
+.rankList li:nth-child(n + 4):before {
+  background: gray;
+}
