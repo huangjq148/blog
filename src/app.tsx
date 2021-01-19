@@ -31,8 +31,7 @@ export async function getInitialState(): Promise<{
         throw Error("获取用户信息失败,请重新登录")
       } else {
         currentUser = result
-        const menuList = await fetchMenuList();
-        const menuCodes = translateMenuToArr([], menuList);
+        const menuCodes = await fetchMenuList();
         currentUser.menuCodes = menuCodes
       }
       return currentUser;

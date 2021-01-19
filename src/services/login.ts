@@ -11,7 +11,7 @@ export interface LoginParamsType {
 }
 
 export async function fakeAccountLogin(data: LoginParamsType) {
-  return myRequest<API.LoginStateType>('/user/login', {
+  return myRequest<API.LoginStateType>('/login', {
     method: 'post',
     // data: params,
     data,

@@ -3,7 +3,7 @@ export default function access(initialState: { currentUser?: API.CurrentUser | u
   const { currentUser } = initialState || {};
   return {
     menuFilter: (item: { menuCode: string }) => {
-      return currentUser?.menuCodes?.includes(item.menuCode);
+      return !item.menuCode || currentUser?.menuCodes?.includes(item.menuCode);
     },
     // canAdmin: currentUser && currentUser.access === 'admin',
   };

@@ -10,22 +10,7 @@ import Report from './components/report';
 const Dashboard: React.FC<{}> = () => (
   <div>
     <Row>
-      <Col span={24}>
-        <PerDayCount />
-      </Col>
-    </Row>
-    <Row gutter={16} className={styles.blockWrap}>
-      <Col span={12}>
-        <ExpRank />
-      </Col>
-      <Col span={12}>
-        <AccessRank />
-      </Col>
-    </Row>
-    <Row className={styles.blockWrap} >
-      <Col span={24}>
-        <Report />
-      </Col>
+      welcome
     </Row>
   </div>
 );

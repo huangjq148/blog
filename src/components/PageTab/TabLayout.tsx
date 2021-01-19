@@ -18,7 +18,8 @@ export default (props: any) => {
     remberRefresh
     // animated
     homePage="/dashboard"
-    errorPage="/exception/404" />
+    // errorPage="/exception/404" 
+    />
     // <TabLayout {...props} contextMenuLabels={contextMenuLabels} />
   )
 }
