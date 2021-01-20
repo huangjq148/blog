@@ -1,5 +1,5 @@
 export interface TableListItem {
-  key: number;
+  id: string;
   disabled?: boolean;
   href: string;
   avatar: string;
@@ -25,12 +25,14 @@ export interface TableListData {
 }
 
 export interface TableListParams {
+  id: string;
   status?: string;
   name?: string;
   desc?: string;
   key?: number;
   pageSize?: number;
   currentPage?: number;
+  params?: { [key: string]: any[] };
   filter?: { [key: string]: any[] };
   sorter?: { [key: string]: any };
 }

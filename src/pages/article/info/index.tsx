@@ -1,72 +1,25 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
-import React, { useState, useRef } from 'react';
-import { useIntl, FormattedMessage } from 'umi';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
+import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import { FooterToolbar } from '@ant-design/pro-layout';
+import ProTable from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import { Button, Drawer, message } from 'antd';
+import React, { useRef, useState } from 'react';
+import EditFormModal from "./components/EditFormModal";
 import type { TableListItem } from './data.d';
-import { queryPage, updateRule, addRule, removeRule } from './service';
-/**
- * 添加节点
- * @param fields
- */
-
-const handleAdd = async (fields: TableListItem) => {
-  const hide = message.loading('正在添加');
-
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-/**
- * 更新节点
- * @param fields
- */
-
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
+import { queryPage, remove } from './service';
 /**
  *  删除节点
  * @param selectedRows
  */
 
-const handleRemove = async (selectedRows: TableListItem[]) => {
+const handleRemove = async (ids: string) => {
   const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+  if (!ids) return true;
 
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
+    await remove(ids);
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -78,28 +31,20 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
 };
 
 const TableList: React.FC<{}> = () => {
-  /**
-   * 新建窗口的弹窗
-   */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  /**
-   * 分布更新窗口的弹窗
-   */
-
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
+  const [editModalData, setEditModalData] = useState({ visible: false, info: {} });
   /**
    * 国际化配置
    */
 
-  const intl = useIntl();
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '标题',
       dataIndex: 'title',
+      search: { transform: () => "title_like" },
       render: (dom, entity) => {
         return (
           <a
@@ -126,37 +71,57 @@ const TableList: React.FC<{}> = () => {
       valueType: 'dateTime',
     },
     {
+      title: '修改时间',
+      sorter: true,
+      dataIndex: 'updateTime',
+      valueType: 'dateTime',
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
         <a
           onClick={() => {
-            handleUpdateModalVisible(true);
-            setCurrentRow(record);
+            setEditModalData({ info: record, visible: true });
           }}
         >
-          配置
+          编辑
         </a>,
-        <a href="https://procomponents.ant.design/">订阅警报</a>,
+        <a onClick={() => {
+          handleRemove(record.id);
+          actionRef.current?.reloadAndRest?.();
+        }}>删除</a>,
       ],
     },
   ];
   return (
     <>
+      <EditFormModal
+        title="分类信息"
+        visible={editModalData.visible}
+        data={editModalData.info}
+        onCancel={() => setEditModalData({ info: {}, visible: false })}
+        onOk={
+          () => {
+            setEditModalData({ ...editModalData, visible: false })
+            actionRef?.current?.reload();
+          }
+        }
+      />
       <ProTable<TableListItem>
-        headerTitle="人员信息"
+        headerTitle="分类信息"
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => handleModalVisible(true)}>
+          <Button type="primary" key="primary" onClick={() => setEditModalData({ info: {}, visible: true })}>
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={(params, sorter, filter) => queryPage({ ...params, sorter, filter })}
+        request={(params, sorter, filter) => queryPage({ params, sorter, filter })}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -175,76 +140,24 @@ const TableList: React.FC<{}> = () => {
                 {selectedRowsState.length}
               </a>{' '}
               项 &nbsp;&nbsp;
-              <span>
+              {/* <span>
                 服务调用次数总计 {selectedRowsState.reduce((pre, item) => pre + item.callNo, 0)} 万
-              </span>
+              </span> */}
             </div>
           }
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState);
+              await handleRemove(selectedRowsState.map((row) => row.id).join());
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
           >
             批量删除
           </Button>
-          <Button type="primary">批量审批</Button>
+          {/* <Button type="primary">批量审批</Button> */}
         </FooterToolbar>
       )}
-      <ModalForm
-        title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: '新建规则',
-        })}
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as TableListItem);
-
-          if (success) {
-            handleModalVisible(false);
-
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '规则名称为必填项',
-            },
-          ]}
-          width="m"
-          name="name"
-        />
-        <ProFormTextArea width="m" name="desc" />
-      </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          setCurrentRow(undefined);
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
 
       <Drawer
         width={600}

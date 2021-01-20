@@ -1,44 +1,32 @@
-import { request } from 'umi';
-import { TableListParams, TableListItem } from './data.d';
-import myRequest from '@/utils/request';
+import type { TableListParams, TableListItem } from './data.d';
+import request from '@/utils/request';
 
 export async function queryPage(params?: TableListParams) {
-  return myRequest('/article', {
-    params,
-  });
-}
-export async function queryRule(params?: TableListParams) {
-  return request('/api/rule', {
+  return request('/article', {
     params,
   });
 }
 
-export async function removeRule(params: { key: number[] }) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'delete',
-    },
+export async function findById(id: string) {
+  return request(`/article/${id}`);
+}
+
+export async function remove(ids: string) {
+  return request(`/article/${ids}`, {
+    method: 'DELETE',
   });
 }
 
-export async function addRule(params: TableListItem) {
-  return request('/api/rule', {
+export async function add(data: TableListItem) {
+  return request('/article', {
     method: 'POST',
-    data: {
-      ...params,
-      method: 'post',
-    },
+    data,
   });
 }
 
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
-    data: {
-      ...params,
-      method: 'update',
-    },
+export async function update(data: TableListParams) {
+  return request(`/article/${data.id}`, {
+    method: 'PUT',
+    data,
   });
 }

@@ -1,4 +1,5 @@
 export interface TableListItem {
+  id: string;
   key: number;
   disabled?: boolean;
   href: string;
@@ -31,6 +32,7 @@ export interface TableListParams {
   key?: number;
   pageSize?: number;
   currentPage?: number;
+  params?: { [key: string]: any[] };
   filter?: { [key: string]: any[] };
   sorter?: { [key: string]: any };
 }

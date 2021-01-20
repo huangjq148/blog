@@ -6,7 +6,6 @@ import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import { fetchMenuList } from '@/services/user'
-import { translateMenuToArr } from "@/utils/utils"
 import type { ResponseError } from 'umi-request';
 import { queryCurrent } from './services/user';
 import defaultSettings from '../config/defaultSettings';
@@ -27,7 +26,7 @@ export async function getInitialState(): Promise<{
     try {
       const result: any = await queryCurrent();
       let currentUser: API.CurrentUser;
-      if (result.code === 20001) {
+      if (result.statusCode === 300) {
         throw Error("获取用户信息失败,请重新登录")
       } else {
         currentUser = result
