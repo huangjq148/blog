@@ -3,7 +3,7 @@ import { Modal, Form, Input, message, Upload } from 'antd';
 import type { Props } from '@/components/Modal/data';
 import JqSelect from '@/components/Select';
 import { update, add, findById } from '../service';
-import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import JqAvatarUploader from "@/components/Upload/Avatar"
 
 const layout = {
   labelCol: { span: 4 },
@@ -13,15 +13,7 @@ const layout = {
 const EditForm = (props: Props) => {
   const [form] = Form.useForm();
   const { onOk, data, visible } = props;
-  const [imageUrl, setImageUrl] = useState<string>("")
-  const [loading, setLoading] = useState<boolean>(false)
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
 
   useEffect(() => {
     async function query(id: string) {
@@ -36,29 +28,6 @@ const EditForm = (props: Props) => {
     }
   }, [data, visible]);
 
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
-  const handleChange = info => {
-    if (info.file.status === 'uploading') {
-      setLoading(true)
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (_imageUrl: string) => {
-        setLoading(false);
-        setImageUrl(_imageUrl);
-      }
-        // this.setState({
-        //   imageUrl,
-        //   loading: false,
-        // }),
-      );
-    }
-  };
 
   return (
     <Modal
@@ -91,16 +60,7 @@ const EditForm = (props: Props) => {
           <JqSelect code="APPLIER_STATUS" />
         </Form.Item>
         <Form.Item name="avatar" label="头像" rules={[{ required: true }]}>
-          <Upload
-            name="file"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="/server/uploader/upload"
-            onChange={handleChange}
-          >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
+          <JqAvatarUploader/>
         </Form.Item>
       </Form>
     </Modal>

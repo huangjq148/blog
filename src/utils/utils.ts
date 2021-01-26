@@ -20,31 +20,50 @@ export const isAntDesignProOrDev = (): boolean => {
 };
 
 // 将后端返回的菜单转为菜单码数组
-export function translateMenuToArr(menuCodes: string[] = [], menus: { menuCode: ''; children: [] }[]){
-    // eslint-disable-next-line array-callback-return
-    menus.map((item: { menuCode: ''; children: [] }) => {
-      menuCodes.push(item.menuCode);
-      if (item.children) {
-        translateMenuToArr(menuCodes, item.children);
-      }
-    });
-    return menuCodes
+export function translateMenuToArr(
+  menuCodes: string[] = [],
+  menus: { menuCode: ''; children: [] }[],
+) {
+  // eslint-disable-next-line array-callback-return
+  menus.map((item: { menuCode: ''; children: [] }) => {
+    menuCodes.push(item.menuCode);
+    if (item.children) {
+      translateMenuToArr(menuCodes, item.children);
+    }
+  });
+  return menuCodes;
 }
 
 /**
  * 下载文件
  * @param url
  */
-export function downloadFile(url: string){
+export function downloadFile(url: string) {
   try {
-      const elemIF = document.createElement("iframe");
-      elemIF.src = url;
-      elemIF.style.display = "none";
-      document.body.appendChild(elemIF);
-      setTimeout(()=>{
-          document.body.removeChild(elemIF)
-      },5000)
+    const elemIF = document.createElement('iframe');
+    elemIF.src = url;
+    elemIF.style.display = 'none';
+    document.body.appendChild(elemIF);
+    setTimeout(() => {
+      document.body.removeChild(elemIF);
+    }, 5000);
   } catch (e) {
-    alert("下载文件失败！");
+    alert('下载文件失败！');
   }
+}
+
+/**
+ * 获取文件下载url
+ * @param realName 
+ */
+export function getFileDownloadUrl(realName: string) {
+  return `/server/uploader/download/${realName}`;
+}
+
+/**
+ * 获取文件预览url
+ * @param realName 
+ */
+export function getFilePreviewUrl(realName: string) {
+  return `/server/uploader/preview/${realName}`;
 }

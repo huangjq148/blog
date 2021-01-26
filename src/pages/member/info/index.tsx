@@ -2,13 +2,15 @@ import { PlusOutlined } from '@ant-design/icons';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import { FooterToolbar } from '@ant-design/pro-layout';
-import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import EditFormModal from "./components/EditFormModal";
 import type { TableListItem } from './data.d';
 import { queryPage, remove } from './service';
+import { useModel } from 'umi';
+import JqTable from "@/components/ProTable"
+import { JqColumns } from "@/components/ProTable/data"
 /**
  *  删除节点
  * @param selectedRows
@@ -31,16 +33,16 @@ const handleRemove = async (ids: string) => {
 };
 
 const TableList: React.FC<{}> = () => {
+  const { codes, getCode } = useModel('count');
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const [editModalData, setEditModalData] = useState({ visible: false, info: {} });
-  /**
-   * 国际化配置
-   */
 
-  const columns: ProColumns<TableListItem>[] = [
+  getCode("SEX")
+
+  const columns: JqColumns<TableListItem>[] = [
     {
       title: '姓名',
       dataIndex: 'name',
@@ -64,14 +66,8 @@ const TableList: React.FC<{}> = () => {
       title: '性别',
       dataIndex: 'sex',
       hideInForm: true,
-      valueEnum: {
-        "0": {
-          text: '男',
-        },
-        "1": {
-          text: '女',
-        },
-      },
+      valueType: 'select',
+      code: "SEX",
     },
     {
       title: '创建时间',
@@ -112,7 +108,7 @@ const TableList: React.FC<{}> = () => {
           }
         }
       />
-      <ProTable<TableListItem>
+      <JqTable
         headerTitle="人员信息"
         actionRef={actionRef}
         rowKey="id"
