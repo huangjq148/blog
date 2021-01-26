@@ -9,6 +9,9 @@ import React, { useRef, useState } from 'react';
 import EditFormModal from "./components/EditFormModal";
 import type { TableListItem } from './data.d';
 import { queryPage, remove } from './service';
+import JqTable from "@/components/ProTable"
+import type { JqColumns } from "@/components/ProTable/data"
+
 /**
  *  删除节点
  * @param selectedRows
@@ -40,7 +43,7 @@ const TableList: React.FC<{}> = () => {
    * 国际化配置
    */
 
-  const columns: ProColumns<TableListItem>[] = [
+  const columns: JqColumns<TableListItem>[] = [
     {
       title: '账号',
       dataIndex: 'username',
@@ -63,16 +66,7 @@ const TableList: React.FC<{}> = () => {
       title: '状态',
       dataIndex: 'status',
       hideInForm: true,
-      valueEnum: {
-        0: {
-          text: '启用',
-          status: 'Success',
-        },
-        1: {
-          text: '禁用',
-          status: 'Error',
-        },
-      },
+      code: "IS_ENABLE"
     },
     {
       title: '创建时间',
@@ -119,7 +113,7 @@ const TableList: React.FC<{}> = () => {
           }
         }
       />
-      <ProTable<TableListItem>
+      <JqTable
         headerTitle="账号信息"
         actionRef={actionRef}
         rowKey="id"

@@ -1,14 +1,16 @@
+import JqTable from "@/components/ProTable";
+import type { JqColumns } from "@/components/ProTable/data";
 import { PlusOutlined } from '@ant-design/icons';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import { FooterToolbar } from '@ant-design/pro-layout';
-import ProTable from '@ant-design/pro-table';
-import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import type { ActionType } from '@ant-design/pro-table';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import EditFormModal from "./components/EditFormModal";
 import type { TableListItem } from './data.d';
 import { queryPage, remove } from './service';
+
 /**
  *  删除节点
  * @param selectedRows
@@ -40,7 +42,7 @@ const TableList: React.FC<{}> = () => {
    * 国际化配置
    */
 
-  const columns: ProColumns<TableListItem>[] = [
+  const columns: JqColumns<TableListItem>[] = [
     {
       title: '标题',
       dataIndex: 'title',
@@ -57,6 +59,13 @@ const TableList: React.FC<{}> = () => {
           </a>
         );
       },
+    },
+    {
+      title: '文章分类',
+      dataIndex: 'type',
+      hideInForm: true,
+      code: "ARTICLE_TYPE",
+      // isCodeCache: false
     },
     {
       title: '浏览次数',
@@ -109,7 +118,7 @@ const TableList: React.FC<{}> = () => {
           }
         }
       />
-      <ProTable<TableListItem>
+      <JqTable
         headerTitle="分类信息"
         actionRef={actionRef}
         rowKey="id"

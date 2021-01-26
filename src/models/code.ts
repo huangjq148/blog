@@ -1,65 +1,52 @@
-import { Effect, Reducer, Subscription } from 'umi';
+import { useState } from 'react';
+import request from '@/utils/request';
 
-import enums from "../../config/enum"
+type Code = { value: string; label: string; status: string };
 
-export interface Code { label: string, value: string }
-
-export interface CodeModelState {
-    codes: Object,
-}
-export interface CodeModelType {
-    namespace: 'codes';
-    state: CodeModelState;
-    effects: {
-        query: Effect;
-    };
-    reducers: {
-        save: Reducer<CodeModelState>;
-    };
-    subscriptions: { setup: Subscription };
-}
-const IndexModel: CodeModelType = {
-    namespace: 'codes',
-    state: {
-        codes: enums
-    },
-    effects: {
-        *query({ code }, { call, put }) {
-            let result
-            if (code === "sex") {
-                result = [{ value: "0", label: "男" }, { value: "1", label: "女" }]
-            } else if (code === "status") {
-                result = [{ value: "0", label: "已认证" }, { value: "1", label: "未认证" }]
-            }
-            yield put({
-                type: 'save',
-                code,
-                data: result
-            });
-        },
-    },
-    reducers: {
-        save(state = { codes: {} }, { code, data }): CodeModelState {
-            let result = state;
-            if (!state.codes[code]) {
-                result = {
-                    ...state,
-                    codes: { ...state.codes, [code]: data }
-                }
-            }
-            return result;
-        },
-    },
-    subscriptions: {
-        setup({ dispatch, history }) {
-            return history.listen(({ pathname }) => {
-                if (pathname === '/') {
-                    dispatch({
-                        type: 'query',
-                    })
-                }
-            });
-        }
-    }
+const fetchRemoteCode = async (codeName: string) => {
+  return request(`/code/${codeName}`);
 };
-export default IndexModel;
+
+function arrToEnum(code: Code[]) {
+  const result = {};
+  if (code?.length) {
+    // eslint-disable-next-line array-callback-return
+    code.map((item: Code) => {
+      result[item.value] = {
+        text: item.label,
+        status: item.status,
+      };
+    });
+  }
+  return result;
+}
+
+export default () => {
+  const [codes, setCodes] = useState({});
+  const [codeEnum, setCodeEnum] = useState({});
+
+  async function fetchCode(codeName: string) {
+    const result = await fetchRemoteCode(codeName);
+    setCodes({
+      ...codes,
+      [codeName]: result.map((item: Code) => ({ value: item.value, label: item.label })),
+    });
+    setCodeEnum({
+      ...codeEnum,
+      [codeName]: arrToEnum(result),
+    });
+    return result;
+  }
+
+  async function getCode(codeName: string, isCodeCache: boolean = true) {
+    let result = '';
+    // eslint-disable-next-line no-empty
+    if (!codes[codeName] || isCodeCache === false) {
+      result = await fetchCode(codeName);
+    }
+
+    return result;
+  }
+
+  return { codes, codeEnum, getCode };
+};

@@ -55,7 +55,7 @@ const EditForm = (props: Props) => {
           <Input />
         </Form.Item>
         <Form.Item name="type" label="类型" >
-          <JqSelect code="APPLIER_STATUS" />
+          <JqSelect code="ARTICLE_TYPE" />
         </Form.Item>
         <Form.Item name="content" label="内容" rules={[{ required: true }]}>
           <Input.TextArea />

@@ -2,8 +2,8 @@ import type { ProColumns } from '@ant-design/pro-table';
 
 export type JqColumns<T = any, ValueType = 'text'> = {
   code?: string;
+  isCodeCache?: boolean;
 } & ProColumns<T, ValueType>;
-
 
 export interface TableListPagination {
   total: number;

@@ -57,7 +57,7 @@ const EditForm = (props: Props) => {
           <Input />
         </Form.Item>
         <Form.Item name="sex" label="性别" rules={[{ required: true }]}>
-          <JqSelect code="APPLIER_STATUS" />
+          <JqSelect code="SEX" />
         </Form.Item>
         <Form.Item name="avatar" label="头像" rules={[{ required: true }]}>
           <JqAvatarUploader/>

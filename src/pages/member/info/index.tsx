@@ -10,7 +10,7 @@ import type { TableListItem } from './data.d';
 import { queryPage, remove } from './service';
 import { useModel } from 'umi';
 import JqTable from "@/components/ProTable"
-import { JqColumns } from "@/components/ProTable/data"
+import type { JqColumns } from "@/components/ProTable/data"
 /**
  *  删除节点
  * @param selectedRows
@@ -33,14 +33,11 @@ const handleRemove = async (ids: string) => {
 };
 
 const TableList: React.FC<{}> = () => {
-  const { codes, getCode } = useModel('count');
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const [editModalData, setEditModalData] = useState({ visible: false, info: {} });
-
-  getCode("SEX")
 
   const columns: JqColumns<TableListItem>[] = [
     {
