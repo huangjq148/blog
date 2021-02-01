@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, message } from 'antd';
+import { Modal, Form, Input, message, InputNumber } from 'antd';
 import type { Props } from '@/components/Modal/data';
 import { update, add, findById } from '../service';
 import JqSelect from '@/components/Select';
+import MarkdownEditor from "@/components/MarkdownEditor"
 
 const layout = {
   labelCol: { span: 4 },
@@ -58,10 +59,10 @@ const EditForm = (props: Props) => {
           <JqSelect code="ARTICLE_TYPE" />
         </Form.Item>
         <Form.Item name="content" label="内容" rules={[{ required: true }]}>
-          <Input.TextArea />
+          <MarkdownEditor/>
         </Form.Item>
         <Form.Item name="sortNo" label="序号" rules={[{ required: true }]}>
-          <Input.TextArea />
+          <InputNumber />
         </Form.Item>
       </Form>
     </Modal>

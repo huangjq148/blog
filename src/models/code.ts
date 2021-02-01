@@ -41,7 +41,8 @@ export default () => {
   async function getCode(codeName: string, isCodeCache: boolean = true) {
     let result = '';
     // eslint-disable-next-line no-empty
-    if (!codes[codeName] || isCodeCache === false) {
+    // if (!codes[codeName] || isCodeCache === false) {
+    if (!codes[codeName]) {
       result = await fetchCode(codeName);
     }
 

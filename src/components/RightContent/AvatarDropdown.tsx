@@ -7,6 +7,7 @@ import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import ChangePassword from "./ChangePassword"
 import styles from './index.less';
+import { getFilePreviewUrl } from "@/utils/utils"
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -83,7 +84,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
   const { currentUser } = initialState;
 
-  if (!currentUser || !currentUser.realName) {
+  if (!currentUser || !currentUser.name) {
     return loading;
   }
 
@@ -125,8 +126,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         }} />
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar || defaultAvatar} alt="avatar" />
-          <span className={`${styles.name} anticon`}>{currentUser.realName}</span>
+          <Avatar size="small" className={styles.avatar} src={currentUser.avatar ? getFilePreviewUrl(currentUser.avatar) : defaultAvatar} alt="avatar" />
+          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
         </span>
       </HeaderDropdown>
     </>

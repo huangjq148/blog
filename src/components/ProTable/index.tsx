@@ -5,7 +5,6 @@ import type { ParamsType } from '@ant-design/pro-provider';
 import type { JqColumns } from './data.d';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import _ from "lodash"
 
 
 const JqProTable = <T extends Record<string, any>, U extends ParamsType, ValueType>(
@@ -23,7 +22,7 @@ const JqProTable = <T extends Record<string, any>, U extends ParamsType, ValueTy
             if (!item.code) {
                 tmp.push(item)
             } else {
-                getCode(item.code, item.isCodeCache)
+                getCode(item.code, false)
                 tmp.push({
                     ...item, valueEnum: codeEnum[item.code], fieldProps: {
                         options: codes[item.code]

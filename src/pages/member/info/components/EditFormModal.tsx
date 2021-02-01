@@ -32,7 +32,7 @@ const EditForm = (props: Props) => {
   return (
     <Modal
       {...props}
-      forceRender={false}
+      getContainer={false}
       onOk={async () => {
         const hide = message.loading('正在保存');
         try {

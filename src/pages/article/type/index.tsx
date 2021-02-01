@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { FooterToolbar } from '@ant-design/pro-layout';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, message } from 'antd';
@@ -61,9 +61,11 @@ const TableList: React.FC<{}> = () => {
     {
       title: '描述',
       dataIndex: 'description',
+      search: { transform: () => "description_like" },
     },
     {
       title: '排序序号',
+      search: false,
       dataIndex: 'sortNo',
     },
     {
@@ -98,7 +100,7 @@ const TableList: React.FC<{}> = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
       <EditFormModal
         title="分类信息"
         visible={editModalData.visible}
@@ -184,7 +186,7 @@ const TableList: React.FC<{}> = () => {
           />
         )}
       </Drawer>
-    </>
+    </PageContainer>
   );
 };
 

@@ -3,7 +3,7 @@ import type { JqColumns } from "@/components/ProTable/data";
 import { PlusOutlined } from '@ant-design/icons';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { FooterToolbar } from '@ant-design/pro-layout';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType } from '@ant-design/pro-table';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
@@ -105,7 +105,7 @@ const TableList: React.FC<{}> = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
       <EditFormModal
         title="分类信息"
         visible={editModalData.visible}
@@ -191,7 +191,7 @@ const TableList: React.FC<{}> = () => {
           />
         )}
       </Drawer>
-    </>
+    </PageContainer>
   );
 };
 

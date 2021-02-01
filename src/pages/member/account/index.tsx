@@ -1,14 +1,13 @@
 import { PlusOutlined } from '@ant-design/icons';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { FooterToolbar } from '@ant-design/pro-layout';
-import ProTable from '@ant-design/pro-table';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import EditFormModal from "./components/EditFormModal";
 import type { TableListItem } from './data.d';
-import { queryPage, remove } from './service';
+import { queryPage, remove, changeAccountStatus } from './service';
 import JqTable from "@/components/ProTable"
 import type { JqColumns } from "@/components/ProTable/data"
 
@@ -86,21 +85,30 @@ const TableList: React.FC<{}> = () => {
       valueType: 'option',
       render: (_, record) => [
         <a
+          onClick={async () => {
+            await changeAccountStatus(record.id, record.status === "1" ? "0" : "1")
+            message.success("操作成功")
+            actionRef.current?.reloadAndRest?.();
+          }}
+        >
+          {record.status === "1" ? "启用" : "禁用"}
+        </a>,
+        <a
           onClick={() => {
             setEditModalData({ info: record, visible: true });
           }}
         >
           编辑
         </a>,
-        <a onClick={() => {
-          handleRemove(record.id);
+        <a onClick={async () => {
+          await handleRemove(record.id);
           actionRef.current?.reloadAndRest?.();
         }}>删除</a>,
       ],
     },
   ];
   return (
-    <>
+    <PageContainer>
       <EditFormModal
         title="账号信息"
         visible={editModalData.visible}
@@ -186,7 +194,7 @@ const TableList: React.FC<{}> = () => {
           />
         )}
       </Drawer>
-    </>
+    </PageContainer>
   );
 };
 

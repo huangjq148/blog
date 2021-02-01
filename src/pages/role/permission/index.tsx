@@ -1,10 +1,9 @@
-import JqTable from "@/components/ProTable";
-import type { JqColumns } from "@/components/ProTable/data";
 import { PlusOutlined } from '@ant-design/icons';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import type { ActionType } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import EditFormModal from "./components/EditFormModal";
@@ -37,38 +36,48 @@ const TableList: React.FC<{}> = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const [editModalData, setEditModalData] = useState({ visible: false, info: {} });
+  /**
+   * 国际化配置
+   */
 
-  const columns: JqColumns<TableListItem>[] = [
+  const columns: ProColumns<TableListItem>[] = [
     {
-      title: '姓名',
+      title: '权限名',
       dataIndex: 'name',
       search: { transform: () => "name_like" },
-      tip: '人员姓名',
       render: (dom, entity) => {
         return (
-          <a onClick={
-            () => {
+          <a
+            onClick={() => {
               setCurrentRow(entity);
               setShowDetail(true);
-            }
-          }
+            }}
           >
             {dom}
-          </a >
+          </a>
         );
       },
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
-      hideInForm: true,
-      valueType: 'select',
-      code: "SEX",
+      title: '权限码',
+      dataIndex: 'code',
+      search: { transform: () => "code_like" },
+    },
+    {
+      title: '描述',
+      search: { transform: () => "description_like" },
+      dataIndex: 'description',
     },
     {
       title: '创建时间',
       sorter: true,
       dataIndex: 'createTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: '修改时间',
+      sorter: true,
+      dataIndex: 'updateTime',
       valueType: 'dateTime',
     },
     {
@@ -93,7 +102,7 @@ const TableList: React.FC<{}> = () => {
   return (
     <PageContainer>
       <EditFormModal
-        title="人员信息"
+        title="分类信息"
         visible={editModalData.visible}
         data={editModalData.info}
         onCancel={() => setEditModalData({ info: {}, visible: false })}
@@ -104,8 +113,8 @@ const TableList: React.FC<{}> = () => {
           }
         }
       />
-      <JqTable
-        headerTitle="人员信息"
+      <ProTable<TableListItem>
+        headerTitle="分类信息"
         actionRef={actionRef}
         rowKey="id"
         search={{

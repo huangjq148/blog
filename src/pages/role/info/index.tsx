@@ -10,6 +10,7 @@ import React, { useRef, useState } from 'react';
 import EditFormModal from "./components/EditFormModal";
 import type { TableListItem } from './data.d';
 import { queryPage, remove } from './service';
+
 /**
  *  删除节点
  * @param selectedRows
@@ -37,38 +38,49 @@ const TableList: React.FC<{}> = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const [editModalData, setEditModalData] = useState({ visible: false, info: {} });
+  /**
+   * 国际化配置
+   */
 
   const columns: JqColumns<TableListItem>[] = [
     {
-      title: '姓名',
+      title: '角色名',
       dataIndex: 'name',
       search: { transform: () => "name_like" },
-      tip: '人员姓名',
       render: (dom, entity) => {
         return (
-          <a onClick={
-            () => {
+          <a
+            onClick={() => {
               setCurrentRow(entity);
               setShowDetail(true);
-            }
-          }
+            }}
           >
             {dom}
-          </a >
+          </a>
         );
       },
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
-      hideInForm: true,
-      valueType: 'select',
-      code: "SEX",
+      title: '角色码',
+      dataIndex: 'code',
+      search: { transform: () => "code_like" },
+      // isCodeCache: false
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
+      search: false,
     },
     {
       title: '创建时间',
       sorter: true,
       dataIndex: 'createTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: '修改时间',
+      sorter: true,
+      dataIndex: 'updateTime',
       valueType: 'dateTime',
     },
     {
@@ -93,7 +105,7 @@ const TableList: React.FC<{}> = () => {
   return (
     <PageContainer>
       <EditFormModal
-        title="人员信息"
+        title="分类信息"
         visible={editModalData.visible}
         data={editModalData.info}
         onCancel={() => setEditModalData({ info: {}, visible: false })}
@@ -105,7 +117,7 @@ const TableList: React.FC<{}> = () => {
         }
       />
       <JqTable
-        headerTitle="人员信息"
+        headerTitle="分类信息"
         actionRef={actionRef}
         rowKey="id"
         search={{

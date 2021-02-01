@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, Form, Row, Col } from 'antd';
 import ShowLabel from '@/components/ShowLabel';
 import dayjs from 'dayjs';
-import { Props } from './data';
+import type { Props } from './data';
 
-export interface Item {
+export type Item = {
   label: string;
   key: string;
   type?: string;

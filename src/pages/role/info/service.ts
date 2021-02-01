@@ -2,42 +2,31 @@ import type { TableListParams, TableListItem } from './data.d';
 import request from '@/utils/request';
 
 export async function queryPage(params?: TableListParams) {
-  return request('/user-account', {
+  return request('/role', {
     params,
   });
 }
 
 export async function findById(id: string) {
-  return request(`/user-account/${id}`);
+  return request(`/role/${id}`);
 }
 
 export async function remove(ids: string) {
-  return request(`/user-account/${ids}`, {
+  return request(`/role/${ids}`, {
     method: 'DELETE',
   });
 }
 
 export async function add(data: TableListItem) {
-  return request('/user-account', {
+  return request('/role', {
     method: 'POST',
     data,
   });
 }
 
 export async function update(data: TableListParams) {
-  return request('/user-account', {
+  return request(`/role/${data.id}`, {
     method: 'PUT',
     data,
-  });
-}
-
-/**
- * 修改账号状态
- * @param id 
- * @param status 
- */
-export async function changeAccountStatus(id: string, status: string) {
-  return request(`/user-account/${id}/status/${status}`, {
-    method: 'PUT',
   });
 }

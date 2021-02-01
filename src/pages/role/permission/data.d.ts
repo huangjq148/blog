@@ -1,6 +1,5 @@
 export interface TableListItem {
   id: string;
-  key: number;
   disabled?: boolean;
   href: string;
   avatar: string;
@@ -8,7 +7,7 @@ export interface TableListItem {
   owner: string;
   desc: string;
   callNo: number;
-  status: string;
+  status: number;
   updatedAt: Date;
   createdAt: Date;
   progress: number;
@@ -26,6 +25,7 @@ export interface TableListData {
 }
 
 export interface TableListParams {
+  id: string;
   status?: string;
   name?: string;
   desc?: string;
