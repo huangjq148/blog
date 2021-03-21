@@ -108,6 +108,7 @@ const TableList: React.FC<{}> = () => {
     <PageContainer>
       <EditFormModal
         title="分类信息"
+        width="900px"
         visible={editModalData.visible}
         data={editModalData.info}
         onCancel={() => setEditModalData({ info: {}, visible: false })}

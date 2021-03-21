@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Modal, Form, Input, message } from 'antd';
 import type { Props } from '@/components/Modal/data';
 import { update, add, findById } from '../service';
+import JqAvatarUploader from "@/components/Upload/Avatar"
 
 const layout = {
   labelCol: { span: 4 },
@@ -53,9 +54,8 @@ const EditForm = (props: Props) => {
         <Form.Item name="name" label="分类名" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="sex" label="封面照片" >
-          {/* <JqSelect code="APPLIER_STATUS" /> */}
-          <Input />
+        <Form.Item name="photoPath" label="封面照片" rules={[{ required: true }]}>
+          <JqAvatarUploader/>
         </Form.Item>
         <Form.Item name="description" label="描述" rules={[{ required: true }]}>
           <Input.TextArea />
