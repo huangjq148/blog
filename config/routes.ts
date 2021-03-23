@@ -17,10 +17,18 @@
   },
   {
     path: '/',
-    redirect: '/dashboard',
+    redirect: '/home',
   },
   {
-    path: '/dashboard',
+    path: '/home',
+    name: '首页',
+    icon: 'smile',
+    layout: false,
+    hideInMenu: true,
+    component: './home/index',
+  },
+  {
+    path: '/admin',
     name: '首页',
     icon: 'smile',
     access: 'menuFilter',
